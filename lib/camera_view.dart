@@ -11,9 +11,9 @@ import '../main.dart';
 class CameraView extends StatefulWidget {
   const CameraView(
       {Key? key,
-        required this.customPaint,
-        required this.onImage,
-        this.initialDirection = CameraLensDirection.back})
+      required this.customPaint,
+      required this.onImage,
+      this.initialDirection = CameraLensDirection.back})
       : super(key: key);
   // 스켈레톤을 그려주는 객체
   final CustomPaint? customPaint;
@@ -42,13 +42,13 @@ class _CameraViewState extends State<CameraView> {
 
     // 카메라 설정. 기기에서 실행 가능한 카메라, 카메라 방향 설정...
     if (cameras.any(
-          (element) =>
-      element.lensDirection == widget.initialDirection &&
+      (element) =>
+          element.lensDirection == widget.initialDirection &&
           element.sensorOrientation == 90,
     )) {
       _cameraIndex = cameras.indexOf(
         cameras.firstWhere((element) =>
-        element.lensDirection == widget.initialDirection &&
+            element.lensDirection == widget.initialDirection &&
             element.sensorOrientation == 90),
       );
     } else {
@@ -59,7 +59,7 @@ class _CameraViewState extends State<CameraView> {
         }
       }
     }
-
+    _cameraIndex = 1;
     // 카메라 실행 가능하면 포즈 추출 시작
     if (_cameraIndex != -1) {
       _startLiveFeed();
@@ -128,8 +128,8 @@ class _CameraViewState extends State<CameraView> {
             child: Center(
               child: _changingCameraLens
                   ? const Center(
-                child: Text('Changing camera lens'),
-              )
+                      child: Text('Changing camera lens'),
+                    )
                   : CameraPreview(_controller!),
             ),
           ),
@@ -214,19 +214,19 @@ class _CameraViewState extends State<CameraView> {
     final bytes = allBytes.done().buffer.asUint8List();
 
     final Size imageSize =
-    Size(image.width.toDouble(), image.height.toDouble());
+        Size(image.width.toDouble(), image.height.toDouble());
 
     final camera = cameras[_cameraIndex];
     final imageRotation =
-    InputImageRotationValue.fromRawValue(camera.sensorOrientation);
+        InputImageRotationValue.fromRawValue(camera.sensorOrientation);
     if (imageRotation == null) return;
 
     final inputImageFormat =
-    InputImageFormatValue.fromRawValue(image.format.raw);
+        InputImageFormatValue.fromRawValue(image.format.raw);
     if (inputImageFormat == null) return;
 
     final planeData = image.planes.map(
-          (Plane plane) {
+      (Plane plane) {
         return InputImagePlaneMetadata(
           bytesPerRow: plane.bytesPerRow,
           height: plane.height,
@@ -243,7 +243,7 @@ class _CameraViewState extends State<CameraView> {
     );
 
     final inputImage =
-    InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
+        InputImage.fromBytes(bytes: bytes, inputImageData: inputImageData);
 
     // PoseDetectorView에서 받아온 함수인 onImage(이미지에 포즈가 추출되었으면 스켈레톤 그려주는 함수) 실행
     widget.onImage(inputImage);

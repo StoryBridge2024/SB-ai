@@ -3,7 +3,8 @@ import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'dart:async';
 
 class PoseArrange extends Object {
-  PoseArrange(this.poses, this.count, this.leftWristXChanges, this.rightWristXChanges);
+  PoseArrange(
+      this.poses, this.count, this.leftWristXChanges, this.rightWristXChanges);
 
   final List<Pose> poses;
   List<int> count;
@@ -18,12 +19,15 @@ class PoseArrange extends Object {
 
   bool detectWaving(List<double> changes) {
     if (changes.length < 10) return false;
-    double max = changes.reduce((value, element) => value > element ? value : element);
-    double min = changes.reduce((value, element) => value < element ? value : element);
+    double max =
+        changes.reduce((value, element) => value > element ? value : element);
+    double min =
+        changes.reduce((value, element) => value < element ? value : element);
     return max - min > 50; // Waving threshold: change of 50 pixels
   }
 
-  String updatePoseCount(List<int> count, int index, String newPose, String currentPose) {
+  String updatePoseCount(
+      List<int> count, int index, String newPose, String currentPose) {
     count[index]++;
     if (count[index] > 30) {
       count[index] = 0;
@@ -44,10 +48,14 @@ class PoseArrange extends Object {
       final leftWristX = pose.landmarks[PoseLandmarkType.leftWrist]?.x ?? 0;
       final rightWristX = pose.landmarks[PoseLandmarkType.rightWrist]?.x ?? 0;
       final noseY = pose.landmarks[PoseLandmarkType.nose]?.y ?? 0;
-      final leftShoulderY = pose.landmarks[PoseLandmarkType.leftShoulder]?.y ?? 0;
-      final rightShoulderY = pose.landmarks[PoseLandmarkType.rightShoulder]?.y ?? 0;
-      final leftShoulderX = pose.landmarks[PoseLandmarkType.leftShoulder]?.x ?? 0;
-      final rightShoulderX = pose.landmarks[PoseLandmarkType.rightShoulder]?.x ?? 0;
+      final leftShoulderY =
+          pose.landmarks[PoseLandmarkType.leftShoulder]?.y ?? 0;
+      final rightShoulderY =
+          pose.landmarks[PoseLandmarkType.rightShoulder]?.y ?? 0;
+      final leftShoulderX =
+          pose.landmarks[PoseLandmarkType.leftShoulder]?.x ?? 0;
+      final rightShoulderX =
+          pose.landmarks[PoseLandmarkType.rightShoulder]?.x ?? 0;
       final leftElbowY = pose.landmarks[PoseLandmarkType.leftElbow]?.y ?? 0;
       final rightElbowY = pose.landmarks[PoseLandmarkType.rightElbow]?.y ?? 0;
       final leftElbowX = pose.landmarks[PoseLandmarkType.leftElbow]?.x ?? 0;
@@ -56,11 +64,14 @@ class PoseArrange extends Object {
       final rightHipY = pose.landmarks[PoseLandmarkType.rightHip]?.y ?? 0;
       final leftHipX = pose.landmarks[PoseLandmarkType.leftHip]?.x ?? 0;
       final rightHipX = pose.landmarks[PoseLandmarkType.rightHip]?.x ?? 0;
-      final leftIndexFingerTipX = pose.landmarks[PoseLandmarkType.leftIndex]?.x ?? 0;
-      final leftIndexFingerTipY = pose.landmarks[PoseLandmarkType.leftIndex]?.y ?? 0;
-      final rightIndexFingerTipX = pose.landmarks[PoseLandmarkType.rightIndex]?.x ?? 0;
-      final rightIndexFingerTipY = pose.landmarks[PoseLandmarkType.rightIndex]?.y ?? 0;
-
+      final leftIndexFingerTipX =
+          pose.landmarks[PoseLandmarkType.leftIndex]?.x ?? 0;
+      final leftIndexFingerTipY =
+          pose.landmarks[PoseLandmarkType.leftIndex]?.y ?? 0;
+      final rightIndexFingerTipX =
+          pose.landmarks[PoseLandmarkType.rightIndex]?.x ?? 0;
+      final rightIndexFingerTipY =
+          pose.landmarks[PoseLandmarkType.rightIndex]?.y ?? 0;
 
       final leftPalmCenterX = (leftWristX + leftIndexFingerTipX) / 2;
       final leftPalmCenterY = (leftWristY + leftIndexFingerTipY) / 2;
@@ -109,17 +120,21 @@ class PoseArrange extends Object {
         kindOfPose = updatePoseCount(count, 8, "팔짱 끼기", kindOfPose);
       }
       // Attention (차렷하기)
-      if (leftWristX > leftHipX && rightWristX < rightHipX &&
-          (leftWristY - leftHipY).abs() < 50 && (rightWristY - rightHipY).abs() < 50) {
+      if (leftWristX > leftHipX &&
+          rightWristX < rightHipX &&
+          (leftWristY - leftHipY).abs() < 50 &&
+          (rightWristY - rightHipY).abs() < 50) {
         kindOfPose = updatePoseCount(count, 9, "차렷하기", kindOfPose);
       }
       // Hands on Hips
-      if (((leftWristX - leftHipX).abs() < 100 && (rightWristX - rightHipX).abs() < 100) &&
+      if (((leftWristX - leftHipX).abs() < 100 &&
+              (rightWristX - rightHipX).abs() < 100) &&
           (leftWristY > leftHipY && rightWristY > rightHipY) &&
           (leftWristY < leftShoulderY && rightWristY < rightShoulderY)) {
         kindOfPose = updatePoseCount(count, 10, "손 허리에", kindOfPose);
       }
 
+      //print(leftWristY);
       // Jumping (Hip height increase as a simple check)
       //if (leftHipY > 200 && rightHipY > 200) {  // Assuming initial standing hip height is less than 200 pixels
       //  kindOfPose = updatePoseCount(count, 11, "점프", kindOfPose);
