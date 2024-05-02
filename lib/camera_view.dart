@@ -117,51 +117,7 @@ class _CameraViewState extends State<CameraView> {
     // to prevent scaling down, invert the value
     if (scale < 1) scale = 1 / scale;
 
-    return Container(
-      color: Colors.black,
-      child: Stack(
-        fit: StackFit.expand,
-        children: <Widget>[
-          // 전면 후면 변경 시 화면 변경 처리
-          Transform.scale(
-            scale: scale,
-            child: Center(
-              child: _changingCameraLens
-                  ? const Center(
-                      child: Text('Changing camera lens'),
-                    )
-                  : CameraPreview(_controller!),
-            ),
-          ),
-          // 추출된 스켈레톤 그리기
-          if (widget.customPaint != null) widget.customPaint!,
-          // 화면 확대 축소 위젯
-          Positioned(
-            bottom: 100,
-            left: 50,
-            right: 50,
-            child: Slider(
-              value: zoomLevel,
-              min: minZoomLevel,
-              max: maxZoomLevel,
-              onChanged: (newSliderValue) {
-                setState(() {
-                  zoomLevel = newSliderValue;
-                  _controller!.setZoomLevel(zoomLevel);
-                });
-              },
-              divisions: (maxZoomLevel - 1).toInt() < 1
-                  ? null
-                  : (maxZoomLevel - 1).toInt(),
-            ),
-          ),
-          // if (_byteImage != null)
-          //   Image.memory(_byteImage!, width: 100, height: 100),
-          // if (_byteImage != null)
-          //   Image(image: MemoryImage(_byteImage!), width: 100, height: 100),
-        ],
-      ),
-    );
+    return Container();
   }
 
   // 실시간으로 카메라에서 이미지 받기(비동기적)

@@ -56,20 +56,16 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
             ),
             Stack(
               children: [
-                Positioned(
-                  left: 1000,
-                  top: 1000,
-                  child: Container(
-                    height: 600,
-                    width: 340,
-                    child: CameraView(
-                      // 스켈레톤 그려주는 객체 전달
-                      customPaint: _customPaint,
-                      // 카메라에서 전해주는 이미지 받을 때마다 아래 함수 실행
-                      onImage: (inputImage) {
-                        processImage(inputImage);
-                      },
-                    ),
+                Container(
+                  height: 600,
+                  width: 340,
+                  child: CameraView(
+                    // 스켈레톤 그려주는 객체 전달
+                    customPaint: _customPaint,
+                    // 카메라에서 전해주는 이미지 받을 때마다 아래 함수 실행
+                    onImage: (inputImage) {
+                      processImage(inputImage);
+                    },
                   ),
                 ),
                 Container(
@@ -96,9 +92,9 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
     // 이미지가 정상적이면 포즈에 스켈레톤 그려주기
     if (inputImage.inputImageData?.size != null &&
         inputImage.inputImageData?.imageRotation != null) {
-      final painter = PosePainter(poses, inputImage.inputImageData!.size,
-          inputImage.inputImageData!.imageRotation);
-      _customPaint = CustomPaint(painter: painter);
+      //final painter = PosePainter(poses, inputImage.inputImageData!.size,
+      //    inputImage.inputImageData!.imageRotation);
+      //_customPaint = CustomPaint(painter: painter);
       final kindOfPose =
           PoseArrange(poses, count, leftWristXChanges, rightWristXChanges);
       _kindOfPose = kindOfPose.getPose();
