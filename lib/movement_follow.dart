@@ -34,7 +34,6 @@ class _MovementFollowState extends State<MovementFollow> {
     double y2 = p2!.y;
 
     double angle = -atan2(y2 - y1, x2 - x1);
-    print(angle);
 
     return angle;
   }
