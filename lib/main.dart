@@ -116,7 +116,11 @@ class MyApp extends StatelessWidget {
                     Positioned(
                       left: 0,
                       right: 0,
-                      child: Container(),
+                      child: Container(
+                        width: 500,
+                        height: 500,
+                        child: Image.asset("assets/a.png"),
+                      ),
                     ),
                     Positioned(
                       left: 0,

@@ -15,7 +15,7 @@ class CameraView extends StatefulWidget {
       {Key? key,
         required this.customPaint,
         required this.onImage,
-        this.initialDirection = CameraLensDirection.back})
+        this.initialDirection = CameraLensDirection.front})
       : super(key: key);
   // 스켈레톤을 그려주는 객체
   final CustomPaint? customPaint;
@@ -76,16 +76,9 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      // 카메라 화면 보여주기 + 화면에서 실시간으로 포즈 추출
-      body: Container(
-
+    return Container(
           alignment: Alignment.bottomLeft,
-          child: _liveFeedBody()),
-      // 전면<->후면 변경 버튼
-      floatingActionButton: _floatingActionButton(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-    );
+          child: _liveFeedBody());
   }
 
   // 전면<->후면 카메라 변경 버튼
