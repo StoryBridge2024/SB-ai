@@ -7,6 +7,8 @@ import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 
 import '../main.dart';
 
+CameraController? controller;
+
 // 카메라 화면
 class CameraView extends StatefulWidget {
   const CameraView(
@@ -28,7 +30,7 @@ class CameraView extends StatefulWidget {
 
 class _CameraViewState extends State<CameraView> {
   // 카메라를 다루기 위한 변수
-  CameraController? _controller;
+
   // 카메라 인덱스
   int _cameraIndex = -1;
   // 확대 축소 레벨
@@ -76,7 +78,10 @@ class _CameraViewState extends State<CameraView> {
   Widget build(BuildContext context) {
     return Scaffold(
       // 카메라 화면 보여주기 + 화면에서 실시간으로 포즈 추출
-      body: _liveFeedBody(),
+      body: Container(
+
+          alignment: Alignment.bottomLeft,
+          child: _liveFeedBody()),
       // 전면<->후면 변경 버튼
       floatingActionButton: _floatingActionButton(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
@@ -87,22 +92,22 @@ class _CameraViewState extends State<CameraView> {
   Widget? _floatingActionButton() {
     if (cameras.length == 1) return null;
     return SizedBox(
-        height: 70.0,
-        width: 70.0,
+        height:30.0,
+        width: 30.0,
         child: FloatingActionButton(
           onPressed: _switchLiveCamera,
           child: Icon(
             Platform.isIOS
                 ? Icons.flip_camera_ios_outlined
                 : Icons.flip_camera_android_outlined,
-            size: 40,
+            size: 20,
           ),
         ));
   }
 
   // 카메라 화면 보여주기 + 화면에서 실시간으로 포즈 추출
   Widget _liveFeedBody() {
-    if (_controller?.value.isInitialized == false) {
+    if (controller?.value.isInitialized == false) {
       return Container();
     }
 
@@ -112,13 +117,12 @@ class _CameraViewState extends State<CameraView> {
     // this is actually size.aspectRatio / (1 / camera.aspectRatio)
     // because camera preview size is received as landscape
     // but we're calculating for portrait orientation
-    var scale = size.aspectRatio * _controller!.value.aspectRatio;
+    var scale = size.aspectRatio * controller!.value.aspectRatio;
 
     // to prevent scaling down, invert the value
     if (scale < 1) scale = 1 / scale;
 
     return Container(
-      color: Colors.black,
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
@@ -130,31 +134,12 @@ class _CameraViewState extends State<CameraView> {
                   ? const Center(
                 child: Text('Changing camera lens'),
               )
-                  : CameraPreview(_controller!),
+                  : Container(),
             ),
           ),
           // 추출된 스켈레톤 그리기
           if (widget.customPaint != null) widget.customPaint!,
-          // 화면 확대 축소 위젯
-          Positioned(
-            bottom: 100,
-            left: 50,
-            right: 50,
-            child: Slider(
-              value: zoomLevel,
-              min: minZoomLevel,
-              max: maxZoomLevel,
-              onChanged: (newSliderValue) {
-                setState(() {
-                  zoomLevel = newSliderValue;
-                  _controller!.setZoomLevel(zoomLevel);
-                });
-              },
-              divisions: (maxZoomLevel - 1).toInt() < 1
-                  ? null
-                  : (maxZoomLevel - 1).toInt(),
-            ),
-          ),
+
           // if (_byteImage != null)
           //   Image.memory(_byteImage!, width: 100, height: 100),
           // if (_byteImage != null)
@@ -167,32 +152,32 @@ class _CameraViewState extends State<CameraView> {
   // 실시간으로 카메라에서 이미지 받기(비동기적)
   Future _startLiveFeed() async {
     final camera = cameras[_cameraIndex];
-    _controller = CameraController(
+    controller = CameraController(
       camera,
       ResolutionPreset.high,
       enableAudio: false,
     );
-    _controller?.initialize().then((_) {
+    controller?.initialize().then((_) {
       if (!mounted) {
         return;
       }
-      _controller?.getMinZoomLevel().then((value) {
+      controller?.getMinZoomLevel().then((value) {
         zoomLevel = value;
         minZoomLevel = value;
       });
-      _controller?.getMaxZoomLevel().then((value) {
+      controller?.getMaxZoomLevel().then((value) {
         maxZoomLevel = value;
       });
       // 이미지 받은 것을 _processCameraImage 함수로 처리
-      _controller?.startImageStream(_processCameraImage);
+      controller?.startImageStream(_processCameraImage);
       setState(() {});
     });
   }
 
   Future _stopLiveFeed() async {
-    await _controller?.stopImageStream();
-    await _controller?.dispose();
-    _controller = null;
+    await controller?.stopImageStream();
+    await controller?.dispose();
+    controller = null;
   }
 
   // 전면<->후면 카메라 변경 함수

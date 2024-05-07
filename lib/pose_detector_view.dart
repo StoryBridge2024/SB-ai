@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:image_picker/image_picker.dart';
 import './pose_painter.dart';
 import './pose_arrange.dart';
+import 'package:camera/camera.dart';
 
 import 'camera_view.dart';
 
@@ -50,8 +52,8 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
           child: Text(_kindOfPose),
         ),
         Container(
-          height: 500,
-          width: 500,
+          height: 150,
+          width: 150,
           child: CameraView(
             // 스켈레톤 그려주는 객체 전달
             customPaint: _customPaint,
@@ -61,8 +63,20 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
             },
           ),
         ),
+        Container(
+          height: 100,
+          width: 100,
+          child: temp(),
+        )
       ],
     );
+  }
+
+  Widget temp() {
+    if (controller == null) {
+      return Container();
+    }
+    else return CameraPreview(controller!);
   }
 
   // 카메라에서 실시간으로 받아온 이미지 처리: 이미지에 포즈가 추출되었으면 스켈레톤 그려주기
