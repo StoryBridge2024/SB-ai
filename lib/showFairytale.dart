@@ -88,7 +88,7 @@ class _StoryState extends State<Story> {
                         left: -200,
                         top: -260,
                         child: Transform.scale(
-                          scale: 0.2,
+                          scale: 1,
                           child: Container(
                             child: PoseDetectorView(),
                           ),

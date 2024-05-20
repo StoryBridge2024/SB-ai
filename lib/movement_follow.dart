@@ -151,6 +151,24 @@ class _MovementFollowState extends State<MovementFollow> {
     );
   }
 
+  Widget tempBody(var p1, var p2, var p3, var p4, var image) {
+    return Positioned(
+      right: (((p1!.x + p2!.x + p3!.x + p4!.x) / 4) - length(p2, p1) / 2) + 100,
+      top: (((p1!.y + p2!.y + p3!.y + p4!.y) / 4) - length(p2, p1) / 2),
+      child: Container(
+        width: length(p2, p3),
+        height: length(p2, p3),
+        child: Transform.rotate(
+          angle: angle(p1, p2),
+          child: Container(
+            width: double.infinity,
+            child: Image.asset(image),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 //    List<Uint8List> images = widget.images;
@@ -205,6 +223,13 @@ class _MovementFollowState extends State<MovementFollow> {
               pose.landmarks[PoseLandmarkType.rightElbow],
               "assets/character/real.png",
             ), //오른쪽 팔 1
+            // tempBody(
+            //   pose.landmarks[PoseLandmarkType.rightShoulder],
+            //   pose.landmarks[PoseLandmarkType.leftShoulder],
+            //   pose.landmarks[PoseLandmarkType.rightHip],
+            //   pose.landmarks[PoseLandmarkType.leftHip],
+            //   "assets/character/real.png",
+            // )
           ],
         ),
       );

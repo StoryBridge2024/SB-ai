@@ -72,9 +72,9 @@ class _CameraViewState extends State<CameraView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Container(
       // 카메라 화면 보여주기 + 화면에서 실시간으로 포즈 추출
-      body: _liveFeedBody(),
+      child: _liveFeedBody(),
     );
   }
 
@@ -96,7 +96,6 @@ class _CameraViewState extends State<CameraView> {
     if (scale < 1) scale = 1 / scale;
 
     return Container(
-      color: Colors.black,
       child: Stack(
         fit: StackFit.expand,
         children: <Widget>[
