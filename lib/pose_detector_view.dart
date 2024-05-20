@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import './pose_painter.dart';
 import './pose_arrange.dart';
+import './movement_follow.dart';
 
 import 'camera_view.dart';
 
@@ -24,6 +26,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   CustomPaint? _customPaint;
 
   String _kindOfPose = "";
+  var _movementFollow;
 
   //동작 개수만큼 리스트 요소 개수 정하면 됨.
   List<int> count = List.filled(11, 0);
@@ -43,12 +46,8 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
   @override
   Widget build(BuildContext context) {
     // 카메라뷰 보이기
-    return Column(
+    return Stack(
       children: [
-        Container(
-          height: 100,
-          child: Text(_kindOfPose),
-        ),
         Container(
           height: 500,
           width: 500,
@@ -61,6 +60,22 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
             },
           ),
         ),
+        Container(
+          child: Transform.scale(
+            scale: 1,
+            child: _movementFollow,
+          ),
+        )
+        // ValueListenableBuilder(
+        //   valueListenable: _movementFollow,
+        //   builder: (context, value, _) {
+        //     return Container(
+        //       child: Transform.scale(
+        //         child: _movementFollow,
+        //       ),
+        //     );
+        //   },
+        // ),
       ],
     );
   }
@@ -79,8 +94,11 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
       final painter = PosePainter(poses, inputImage.inputImageData!.size,
           inputImage.inputImageData!.imageRotation);
       _customPaint = CustomPaint(painter: painter);
-      final kindOfPose = PoseArrange(poses, count, leftWristXChanges, rightWristXChanges);
+      final kindOfPose =
+          PoseArrange(poses, count, leftWristXChanges, rightWristXChanges);
       _kindOfPose = kindOfPose.getPose();
+      final movementFollow = MovementFollow(poses: poses);
+      _movementFollow = movementFollow;
     } else {
       // 추출된 포즈 없음
       _customPaint = null;

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 
 import 'package:camera/camera.dart';
+import 'package:frontend/showFairytale.dart';
 import './pose_detector_view.dart';
 
 // 카메라 목록 변수
@@ -35,14 +36,9 @@ class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Pose Detection App'),
-        centerTitle: true,
-        elevation: 0,
-      ),
       // 스켈레톤 추출
-      body: const SafeArea(
-        child: PoseDetectorView(),
+      body: SafeArea(
+        child: ShowFairytale(),
       ),
     );
   }
