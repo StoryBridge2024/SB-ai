@@ -60,9 +60,12 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
             },
           ),
         ),
-        Container(
-          child: Transform.scale(
-            scale: 1,
+        Transform.scale(
+          scale: 0.5,
+          child: Container(
+            alignment: Alignment.center,
+            width: 500,
+            height: 1000,
             child: _movementFollow,
           ),
         )
@@ -102,6 +105,7 @@ class _PoseDetectorViewState extends State<PoseDetectorView> {
     } else {
       // 추출된 포즈 없음
       _customPaint = null;
+      _movementFollow = Container();
     }
     _isBusy = false;
     if (mounted) {

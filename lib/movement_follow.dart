@@ -81,25 +81,6 @@ class _MovementFollowState extends State<MovementFollow> {
     );
   }
 
-  Widget temp(var p1, var p2, String image) {
-    return Positioned(
-      right: (((p1!.x + p2!.x) / 2) - length(p2, p1) / 2) * 0.25,
-      top: (((p1!.y + p2!.y) / 2) - length(p2, p1) / 2) * 0.25,
-      child: Transform.rotate(
-        angle: angle(p1, p2) + 3.141592653579 * 0.5,
-        child: Container(
-          width: 100,
-          height: 100,
-          child: Image.asset(
-            image,
-            width: double.infinity,
-            height: double.infinity,
-          ),
-        ),
-      ),
-    );
-  }
-
   Widget leg(var p1, var p2, Uint8List image) {
     return Positioned(
       right: (((p1!.x + p2!.x) / 2) - length(p2, p1) / 2) * 0.25,
@@ -152,6 +133,24 @@ class _MovementFollowState extends State<MovementFollow> {
     );
   }
 
+  Widget temp(var p1, var p2, String image) {
+    return Positioned(
+      right: (((p1!.x + p2!.x) / 2) - length(p2, p1) / 2) + 100,
+      top: (((p1!.y + p2!.y) / 2) - length(p2, p1) / 2),
+      child: Container(
+        width: length(p2, p1),
+        height: length(p2, p1),
+        child: Transform.rotate(
+          angle: angle(p1, p2),
+          child: Container(
+            width: double.infinity,
+            child: Image.asset(image),
+          ),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
 //    List<Uint8List> images = widget.images;
@@ -159,60 +158,58 @@ class _MovementFollowState extends State<MovementFollow> {
 //    var face = widget.face;
     var ret;
 
+    if (poses.length == 0) ret = Container();
+
     for (final pose in poses) {
-      ret = Container(
-        color: Colors.red,
-        height: 2000,
-        width: 2000,
-        child: Transform.scale(
-          scale: 2,
-          child: Stack(
-            children: [
-              temp(
-                pose.landmarks[PoseLandmarkType.leftHip],
-                pose.landmarks[PoseLandmarkType.leftKnee],
-                "assets/character/real.png",
-              ), //왼쪽 다리 1
-              temp(
-                pose.landmarks[PoseLandmarkType.leftKnee],
-                pose.landmarks[PoseLandmarkType.leftAnkle],
-                "assets/character/real.png",
-              ), //왼쪽 다리 2
-              temp(
-                pose.landmarks[PoseLandmarkType.rightHip],
-                pose.landmarks[PoseLandmarkType.rightKnee],
-                "assets/character/real.png",
-              ), //오른쪽 다리 1
-              temp(
-                pose.landmarks[PoseLandmarkType.rightKnee],
-                pose.landmarks[PoseLandmarkType.rightAnkle],
-                "assets/character/real.png",
-              ), //오른쪽 다리 2
-              temp(
-                pose.landmarks[PoseLandmarkType.leftShoulder],
-                pose.landmarks[PoseLandmarkType.leftElbow],
-                "assets/character/real.png",
-              ), //왼쪽 팔 1
-              temp(
-                pose.landmarks[PoseLandmarkType.leftElbow],
-                pose.landmarks[PoseLandmarkType.leftThumb],
-                "assets/character/real.png",
-              ), //왼쪽 팔 2
-              temp(
-                pose.landmarks[PoseLandmarkType.rightElbow],
-                pose.landmarks[PoseLandmarkType.rightShoulder],
-                "assets/character/real.png",
-              ), //오른쪽 팔 1
-              temp(
-                pose.landmarks[PoseLandmarkType.rightThumb],
-                pose.landmarks[PoseLandmarkType.rightElbow],
-                "assets/character/real.png",
-              ), //오른쪽 팔 1
-            ],
-          ),
+      ret = Transform.scale(
+        scale: 1,
+        child: Stack(
+          children: [
+            temp(
+              pose.landmarks[PoseLandmarkType.leftHip],
+              pose.landmarks[PoseLandmarkType.leftKnee],
+              "assets/character/real.png",
+            ), //왼쪽 다리 1
+            temp(
+              pose.landmarks[PoseLandmarkType.leftKnee],
+              pose.landmarks[PoseLandmarkType.leftAnkle],
+              "assets/character/real.png",
+            ), //왼쪽 다리 2
+            temp(
+              pose.landmarks[PoseLandmarkType.rightHip],
+              pose.landmarks[PoseLandmarkType.rightKnee],
+              "assets/character/real.png",
+            ), //오른쪽 다리 1
+            temp(
+              pose.landmarks[PoseLandmarkType.rightKnee],
+              pose.landmarks[PoseLandmarkType.rightAnkle],
+              "assets/character/real.png",
+            ), //오른쪽 다리 2
+            temp(
+              pose.landmarks[PoseLandmarkType.leftShoulder],
+              pose.landmarks[PoseLandmarkType.leftElbow],
+              "assets/character/real.png",
+            ), //왼쪽 팔 1
+            temp(
+              pose.landmarks[PoseLandmarkType.leftElbow],
+              pose.landmarks[PoseLandmarkType.leftThumb],
+              "assets/character/real.png",
+            ), //왼쪽 팔 2
+            temp(
+              pose.landmarks[PoseLandmarkType.rightElbow],
+              pose.landmarks[PoseLandmarkType.rightShoulder],
+              "assets/character/real.png",
+            ), //오른쪽 팔 1
+            temp(
+              pose.landmarks[PoseLandmarkType.rightThumb],
+              pose.landmarks[PoseLandmarkType.rightElbow],
+              "assets/character/real.png",
+            ), //오른쪽 팔 1
+          ],
         ),
       );
     }
-    return ret!;
+
+    return ret;
   }
 }

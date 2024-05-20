@@ -38,7 +38,7 @@ class Home extends StatelessWidget {
     return Scaffold(
       // 스켈레톤 추출
       body: SafeArea(
-        child: ShowFairytale(),
+        child: PoseDetectorView(),
       ),
     );
   }

@@ -108,14 +108,11 @@ class _CameraViewState extends State<CameraView> {
                   ? const Center(
                       child: Text('Changing camera lens'),
                     )
-                  : RotatedBox(
-                      quarterTurns: 1,
-                      child: CameraPreview(_controller!),
-                    ),
+                  : Container(),
             ),
           ),
           // 추출된 스켈레톤 그리기
-          if (widget.customPaint != null) widget.customPaint!,
+          //if (widget.customPaint != null) widget.customPaint!,
         ],
       ),
     );
